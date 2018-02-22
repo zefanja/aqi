@@ -1,7 +1,7 @@
 function getData() {
   fetch("aqi.json").then(response => {
     response.json().then(data => {
-      console.log(data);
+      //console.log(data);
       updateHtml(data[data.length-1]);
     })
   }).catch(err => {
