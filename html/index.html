@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AQI</title>
+    <script src="aqi.js"></script>
+    <link rel='stylesheet' href='style.css'>
+  </head>
+  <body onload="getData()">
+    <div class="container">
+      <h1>AQI</h1>
+      <p class='time' id="time"></p>
+      <div class='aqi-container' id="containerPm25">
+          <div class='aqi-label'>AQI (PM2.5)</div>
+          <div class='aqi' id="aqiPm25"></div>
+          <div class='pm-label' id="pm25"></div>
+      </div>
+      <div class='aqi-container' id="containerPm10">
+          <div class='aqi-label'>AQI (PM10)</div>
+          <div class='aqi' id="aqiPm10"></div>
+          <div class='pm-label' id="pm10"></div>
+      </div>
+  </body>
+</html>

@@ -1,0 +1,33 @@
+.container {
+    margin-left: auto;
+    margin-right: auto;
+    width: 500px;
+}
+
+.aqi-container {
+    border: 3px solid;
+    border-radius: 10px;
+    width: 200px;
+    float: left;
+    margin: 10px;
+    text-align: center;
+    padding: 10px;
+}
+
+.aqi {
+    font-size: 6em;
+    font-weight: bold;
+}
+
+.pm-label {
+    font-style: italic;
+}
+
+.time {
+    text-align: center;
+    font-weight: bold;
+}
+
+h1 {
+  text-align: center;
+}
