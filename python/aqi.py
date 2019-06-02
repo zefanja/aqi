@@ -3,7 +3,7 @@
 # "DATASHEET": http://cl.ly/ekot
 # https://gist.github.com/kadamski/92653913a53baf9dd1a8
 from __future__ import print_function
-import serial, struct, sys, time, json
+import serial, struct, sys, time, json, subprocess
 
 DEBUG = 0
 CMD_MODE = 2
@@ -17,6 +17,9 @@ MODE_QUERY = 1
 PERIOD_CONTINUOUS = 0
 
 JSON_FILE = '/var/www/html/aqi.json'
+
+MQTT_HOST = ''
+MQTT_TOPIC = '/weather/particulatematter'
 
 ser = serial.Serial()
 ser.port = "/dev/ttyUSB0"
@@ -98,6 +101,13 @@ def cmd_set_id(id):
     ser.write(construct_command(CMD_DEVICE_ID, [0]*10+[id_l, id_h]))
     read_response()
 
+def pub_mqtt(jsonrow):
+    cmd = ['mosquitto_pub', '-h', MQTT_HOST, '-t', MQTT_TOPIC, '-s']
+    print('Publishing using:', cmd)
+    with subprocess.Popen(cmd, shell=False, bufsize=0, stdin=subprocess.PIPE).stdin as f:
+        json.dump(jsonrow, f)
+
+
 if __name__ == "__main__":
     cmd_set_sleep(0)
     cmd_firmware_ver()
@@ -123,12 +133,16 @@ if __name__ == "__main__":
             data.pop(0)
 
         # append new values
-        data.append({'pm25': values[0], 'pm10': values[1], 'time': time.strftime("%d.%m.%Y %H:%M:%S")})
+        jsonrow = {'pm25': values[0], 'pm10': values[1], 'time': time.strftime("%d.%m.%Y %H:%M:%S")}
+        data.append(jsonrow)
 
         # save it
         with open(JSON_FILE, 'w') as outfile:
             json.dump(data, outfile)
 
+        if MQTT_HOST != '':
+            pub_mqtt(jsonrow)
+            
         print("Going to sleep for 1 min...")
         cmd_set_sleep(1)
         time.sleep(60)
