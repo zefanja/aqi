@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python -u
 # coding=utf-8
 # "DATASHEET": http://cl.ly/ekot
 # https://gist.github.com/kadamski/92653913a53baf9dd1a8
