@@ -15,6 +15,8 @@ CMD_WORKING_PERIOD = 8
 MODE_ACTIVE = 0
 MODE_QUERY = 1
 
+JSON_FILE = '/var/www/html/aqi.json'
+
 ser = serial.Serial()
 ser.port = "/dev/ttyUSB0"
 ser.baudrate = 9600
@@ -106,7 +108,7 @@ if __name__ == "__main__":
                 time.sleep(2)
 
         # open stored data
-        with open('/var/www/html/aqi.json') as json_data:
+        with open(JSON_FILE) as json_data:
             data = json.load(json_data)
 
         # check if length is more than 100 and delete first element
@@ -117,7 +119,7 @@ if __name__ == "__main__":
         data.append({'pm25': values[0], 'pm10': values[1], 'time': time.strftime("%d.%m.%Y %H:%M:%S")})
 
         # save it
-        with open('/var/www/html/aqi.json', 'w') as outfile:
+        with open(JSON_FILE, 'w') as outfile:
             json.dump(data, outfile)
 
         print("Going to sleep for 1 min...")
