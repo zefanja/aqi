@@ -108,8 +108,11 @@ if __name__ == "__main__":
                 time.sleep(2)
 
         # open stored data
-        with open(JSON_FILE) as json_data:
-            data = json.load(json_data)
+        try:
+            with open(JSON_FILE) as json_data:
+                data = json.load(json_data)
+        except IOError as e:
+            data = []
 
         # check if length is more than 100 and delete first element
         if len(data) > 100:
