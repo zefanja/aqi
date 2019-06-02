@@ -14,6 +14,7 @@ CMD_FIRMWARE = 7
 CMD_WORKING_PERIOD = 8
 MODE_ACTIVE = 0
 MODE_QUERY = 1
+PERIOD_CONTINUOUS = 0
 
 JSON_FILE = '/var/www/html/aqi.json'
 
@@ -77,7 +78,7 @@ def cmd_query_data():
         values = process_data(d)
     return values
 
-def cmd_set_sleep(sleep=1):
+def cmd_set_sleep(sleep):
     mode = 0 if sleep else 1
     ser.write(construct_command(CMD_SLEEP, [0x1, mode]))
     read_response()
@@ -98,9 +99,12 @@ def cmd_set_id(id):
     read_response()
 
 if __name__ == "__main__":
+    cmd_set_sleep(0)
+    cmd_firmware_ver()
+    cmd_set_working_period(PERIOD_CONTINUOUS)
+    cmd_set_mode(MODE_QUERY);
     while True:
         cmd_set_sleep(0)
-        cmd_set_mode(1);
         for t in range(15):
             values = cmd_query_data();
             if values is not None:
@@ -126,6 +130,5 @@ if __name__ == "__main__":
             json.dump(data, outfile)
 
         print("Going to sleep for 1 min...")
-        cmd_set_mode(0);
-        cmd_set_sleep()
+        cmd_set_sleep(1)
         time.sleep(60)
