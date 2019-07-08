@@ -117,7 +117,7 @@ if __name__ == "__main__":
         cmd_set_sleep(0)
         for t in range(15):
             values = cmd_query_data();
-            if values is not None:
+            for i in range(len(values)-1):
                 print("PM2.5: ", values[0], ", PM10: ", values[1])
                 time.sleep(2)
 
