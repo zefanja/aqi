@@ -117,9 +117,9 @@ if __name__ == "__main__":
         cmd_set_sleep(0)
         for t in range(15):
             values = cmd_query_data();
-            for i in range(len(values)-1):
-                print("PM2.5: ", values[0], ", PM10: ", values[1])
-                time.sleep(2)
+            if values is not None and len(values) == 2:
+              print("PM2.5: ", values[0], ", PM10: ", values[1])
+              time.sleep(2)
 
         # open stored data
         try:
