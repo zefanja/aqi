@@ -1,8 +1,32 @@
+const aqiHist = {
+  maxRows: 100,
+  data: [],
+  idx0: 0,
+  idxMax: 1
+};
+
 function getData() {
   fetch("aqi.json").then(response => {
     response.json().then(data => {
       //console.log(data);
       updateHtml(data[data.length-1]);
+    })
+  }).catch(err => {
+    console.log(err);
+  })
+}
+
+function getHistoryData() {
+  fetch("aqi.json").then(response => {
+    response.json().then(data => {
+      //console.log(data);
+      aqiHist.data = data;
+      aqiHist.idxMax = aqiHist.data.length;
+      aqiHist.idx0 = aqiHist.idxMax - aqiHist.maxRows;
+      if(aqiHist.idx0 < 0) {
+        aqiHist.idx0 = 0;
+      }
+      updateHistoryHtml();
     })
   }).catch(err => {
     console.log(err);
@@ -27,6 +51,80 @@ function updateHtml(data) {
   document.getElementById("containerPm25").style.color = colorsPm25.text
   document.getElementById("containerPm10").style.background = colorsPm10.bg;
   document.getElementById("containerPm10").style.color = colorsPm10.text
+}
+
+function updateHistoryHtml() {
+  document.getElementById("historyTable").innerHTML = "";
+
+  aqiHist.idxMax = aqiHist.idx0 + aqiHist.maxRows;
+  if(aqiHist.idxMax > aqiHist.data.length) {
+    aqiHist.idxMax = aqiHist.data.length;
+  }
+  document.getElementById("currentRowsPage").innerHTML =
+    `rows ${aqiHist.idx0 + 1} to ${aqiHist.idxMax} of ${aqiHist.data.length}`;
+  for(let idx = aqiHist.idx0; idx < aqiHist.idxMax; idx++) {
+    let eRow = document.createElement("tr");
+
+    let data = aqiHist.data[idx];
+    let aqiPm25 = calcAQIpm25(data.pm25);
+    let aqiPm10 = calcAQIpm10(data.pm10);
+
+    let eTime = document.createElement("td");
+    eTime.innerHTML = data.time;
+    eRow.append(eTime);
+
+    let ePm25 = document.createElement("td");
+    ePm25.innerHTML = data.pm25;
+    eRow.append(ePm25);
+
+    let eAqiPm25 = document.createElement("td");
+    eAqiPm25.innerHTML = aqiPm25;
+    eRow.append(eAqiPm25);
+
+    let ePm10 = document.createElement("td");
+    ePm10.innerHTML = data.pm10;
+    eRow.append(ePm10);
+
+    let eAqiPm10 = document.createElement("td");
+    eAqiPm10.innerHTML = aqiPm10;
+    eRow.append(eAqiPm10);
+
+    let colorsPm25 = getColor(aqiPm25);
+    let colorsPm10 = getColor(aqiPm10);
+
+    ePm25.style.background = colorsPm25.bg;
+    ePm25.style.color = colorsPm25.text
+    eAqiPm25.style.background = colorsPm25.bg;
+    eAqiPm25.style.color = colorsPm25.text
+    ePm10.style.background = colorsPm10.bg;
+    ePm10.style.color = colorsPm10.text
+    eAqiPm10.style.background = colorsPm10.bg;
+    eAqiPm10.style.color = colorsPm10.text
+
+    document.getElementById("historyTable").append(eRow);
+  }
+}
+
+function showPrevHistory() {
+  if(aqiHist.idx0 > 0) {
+    aqiHist.idx0 = aqiHist.idx0 - aqiHist.maxRows;
+  }
+  if(aqiHist.idx0 < 0) {
+    aqiHist.idx0 = 0;
+  }
+
+  updateHistoryHtml();
+}
+
+function showNextHistory() {
+  if(aqiHist.idx0 < aqiHist.data.length) {
+    aqiHist.idx0 = aqiHist.idx0 + aqiHist.maxRows;
+  }
+  if(aqiHist.idx0 > aqiHist.data.length - aqiHist.maxRows) {
+    aqiHist.idx0 = aqiHist.data.length - aqiHist.maxRows;
+  }
+
+  updateHistoryHtml();
 }
 
 function getColor(aqi) {
