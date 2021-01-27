@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AQI history</title>
+    <script src="aqi.js"></script>
+    <link rel='stylesheet' href='style.css'>
+  </head>
+  <body>
+    <div class="container">
+      <h1>AQI history</h1>
+      <p class='time' id="time"></p>
+      <table>
+        <thead>
+          <tr id="historyTableHeader">
+            <th>time</th>
+            <th>pm2.5<br/>(µg/m³)</th>
+            <th>aqi<br/>(pm2.5)</th>
+            <th>pm10<br/>(µg/m³)</th>
+            <th>aqi<br/>(pm10)</th>
+          </tr>
+        </thead>
+        <tbody id="historyTable">
+        </tbody>
+      </table>
+      <div class="link">
+        <a href="#" onclick="showPrevHistory()">older</a>
+        <span id="currentRowsPage"></span>
+        <a href="#" onclick="showNextHistory()">newer</a>
+      </div>
+      <div class="link">
+        <a href="/">current status</a>
+      </div>
+    </div>
+  </body>
+  <script type="text/javascript">
+    getHistoryData();
+  </script>
+</html>

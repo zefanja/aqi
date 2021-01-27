@@ -23,10 +23,33 @@
     font-style: italic;
 }
 
-.time {
+.time, .link {
     text-align: center;
 }
 
+table {
+    border: 2px solid #097;
+}
+
+table thead tr {
+    background-color: #097;
+    color: #fff;
+}
+
+table th, table td {
+    padding: 4px 4px;
+    text-align: center;
+}
+
+table tbody tr:nth-of-type(even) {
+    background-color: #ddd;
+}
+
+table tbody tr:hover {
+    color: #fff;
+    background-color: #097;
+}
+
 h2 {
-  text-align: center;
+    text-align: center;
 }
